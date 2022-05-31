@@ -132,7 +132,6 @@ class OMysql {
 
         switch( format ) {
             case 'id':
-                console.log( this.#lastResult );
                 let insertId = Ofn.issetGet( this.#lastResult.columns[ 0 ], 'insertId' );
                 return fnSanitize ? fnSanitize( insertId ) : insertId;
 

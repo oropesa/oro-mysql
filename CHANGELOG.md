@@ -1,3 +1,7 @@
+## 1.0.1 / 2022-05-31
+* Fixed removing a forgotten console.log in `query, id`.
+* Added testing of `query, fnSanitize`.
+
 ## 1.0.0 / 2022-05-31
 * Added `MIT License`.
 * Added _unit testing_ `Jest`.

@@ -215,6 +215,7 @@ By default the returned object is `resultArray`. This object extends from `Array
 3. *valueKey*: String|Number, name or position of the column to get the value.
 4. *valueId*: String|Number, name or position of the column to use as param.
 5. *fnSanitize*: String, name of function to map each value.
+   <br><small>Note: If _format_ is `row|array`, it maps each column-value, not the whole object.</small>
 
 #### (await .query) Formats
 

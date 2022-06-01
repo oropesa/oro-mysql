@@ -40,11 +40,9 @@ describe('query when pool not opened', () => {
         const oMysql = new OMysql( { settings } );
 
         let result = await oMysql.query( `INSERT INTO test_easy ( name ) VALUES ( 'chacho' )` );
-        let lastQuery = oMysql.getLastQuery();
 
-        expect( result ).toBe( false );
-        expect( lastQuery.status ).toBe( false );
-        expect( lastQuery.error.msg ).toBe( 'Server is down' );
+        expect( result.status ).toBe( false );
+        expect( result.error.msg ).toBe( 'Server is down' );
     } );
 
     test( 'query after poolClose', async () => {
@@ -55,16 +53,13 @@ describe('query when pool not opened', () => {
         await oMysql.poolClose();
 
         let result = await oMysql.query( `INSERT INTO test_easy ( name ) VALUES ( 'chacho' )` );
-        let lastQuery = oMysql.getLastQuery();
 
-        expect( result ).toBe( false );
-        expect( lastQuery.status ).toBe( false );
-        expect( lastQuery.error.msg ).toBe( 'Server is down' );
+        expect( result.status ).toBe( false );
+        expect( result.error.msg ).toBe( 'Server is down' );
     } );
 });
 
 describe('query INSERT', () => {
-
     test( 'query INSERT bad', async () => {
         let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
         const oMysql = new OMysql( { settings } );
@@ -75,22 +70,24 @@ describe('query INSERT', () => {
 
         let lastQuery = oMysql.getLastQuery();
 
-        expect( result ).toBe( false );
+        expect( result.status ).toBe( false );
+        expect( result.error.msg ).toBe( "Error: Unknown column 'namee' in 'field list'" );
         expect( lastQuery.status ).toBe( false );
         expect( lastQuery.error.msg ).toBe( "Error: Unknown column 'namee' in 'field list'" );
     } );
 
-    test( 'query INSERT ok', async () => {
+    test( 'query INSERT ok bool', async () => {
         let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
         const oMysql = new OMysql( { settings } );
 
         await oMysql.poolOpen();
-        let result = await oMysql.query( `INSERT INTO test_easy ( name ) VALUES ( 'chacho' )` );
+        let result = await oMysql.query( `INSERT INTO test_easy ( name ) VALUES ( 'chacho' )`, 'bool' );
         await oMysql.poolClose();
 
         let lastQuery = oMysql.getLastQuery();
 
-        expect( result.constructor.name ).toBe( 'ResultArray' );
+        expect( result ).toBe( true );
+        expect( lastQuery.constructor.name ).toBe( 'ResultArray' );
         expect( lastQuery.count ).toBe( 1 );
         expect( lastQuery.status ).toBe( true );
     } );
@@ -140,20 +137,20 @@ describe('query INSERT', () => {
         expect( lastQuery.status ).toBe( true );
     } );
 
-
-
     test( 'query INSERT complex ok get id', async () => {
         let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
         const oMysql = new OMysql( { settings } );
 
         await oMysql.poolOpen();
-        let result = await oMysql.query( `INSERT INTO test_complex ( code, name ) VALUES ( 'chacho', 'loco' )`, 'id' );
+        let result = await oMysql.query( `INSERT INTO test_complex ( name ) VALUES ( 'chacho' ), ( 'loco' )`, 'id' );
+        let arr = await oMysql.query( `SELECT * FROM test_complex`, 'array' );
         await oMysql.poolClose();
 
-        let lastQuery = oMysql.getLastQuery();
+        let lastQuery = oMysql.getLastQuery( 1 );
 
         expect( result ).toBe( 1 );
-        expect( lastQuery.count ).toBe( 1 );
+        expect( arr ).toEqual( [ { name: 'chacho', code: 1 }, { name: 'loco', code: 2 } ] );
+        expect( lastQuery.count ).toBe( 2 );
         expect( lastQuery.status ).toBe( true );
     } );
 });
@@ -214,11 +211,9 @@ describe('query SELECT', () => {
         let result = await oMysql.query( `SELECT * FROMM test_easy` );
         await oMysql.poolClose();
 
-        let lastQuery = oMysql.getLastQuery();
-
-        expect( result ).toBe( false );
-        expect( lastQuery.status ).toBe( false );
-        expect( lastQuery.error.msg ).toMatch( /(Error: You have an error in your SQL syntax;)/ );
+        expect( result.constructor.name ).toBe( 'ResultArray' );
+        expect( result.status ).toBe( false );
+        expect( result.error.msg ).toMatch( /(Error: You have an error in your SQL syntax;)/ );
     } );
 
     test( 'query SELECT ok', async () => {
@@ -246,6 +241,21 @@ describe('query SELECT', () => {
 
         expect( result ).toBe( true );
         expect( lastQuery.status ).toBe( true );
+    } );
+
+    test( 'query SELECT ok get bad format', async () => {
+        let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
+        const oMysql = new OMysql( { settings } );
+
+        await oMysql.poolOpen();
+        let result = await oMysql.query( `SELECT * FROM test_easy`, 'chacho' );
+        await oMysql.poolClose();
+
+        let lastQuery = oMysql.getLastQuery();
+
+        expect( result ).toBe( false );
+        expect( lastQuery.status ).toBe( false );
+        expect( lastQuery.error.msg ).toBe( 'OMysql.query:format is not allowed: chacho' );
     } );
 
     test( 'query SELECT ok get count', async () => {
@@ -308,6 +318,21 @@ describe('query SELECT', () => {
         expect( lastQuery.status ).toBe( true );
     } );
 
+    test( 'query SELECT ok get value bad column', async () => {
+        let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
+        const oMysql = new OMysql( { settings } );
+
+        await oMysql.poolOpen();
+        let result = await oMysql.query( `SELECT * FROM test_easy WHERE id = 1`, 'value', 'chacho' );
+        await oMysql.poolClose();
+
+        let lastQuery = oMysql.getLastQuery();
+
+        expect( result ).toBe( undefined );
+        expect( lastQuery.count ).toBe( 1 );
+        expect( lastQuery.status ).toBe( true );
+    } );
+
     test( 'query SELECT ok get values default', async () => {
         let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
         const oMysql = new OMysql( { settings } );
@@ -338,6 +363,21 @@ describe('query SELECT', () => {
         expect( lastQuery.status ).toBe( true );
     } );
 
+    test( 'query SELECT ok get values bad column', async () => {
+        let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
+        const oMysql = new OMysql( { settings } );
+
+        await oMysql.poolOpen();
+        let result = await oMysql.query( `SELECT * FROM test_easy ORDER BY id ASC`, 'values', 'chacho' );
+        await oMysql.poolClose();
+
+        let lastQuery = oMysql.getLastQuery();
+
+        expect( result ).toEqual( [ undefined, undefined, undefined ] );
+        expect( lastQuery.count ).toBe( 3 );
+        expect( lastQuery.status ).toBe( true );
+    } );
+
     test( 'query SELECT ok get valuesById default', async () => {
         let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
         const oMysql = new OMysql( { settings } );
@@ -364,6 +404,36 @@ describe('query SELECT', () => {
         let lastQuery = oMysql.getLastQuery();
 
         expect( result ).toEqual( { 'chacho': 1, 'bar': 2, 'tio': 4 } );
+        expect( lastQuery.count ).toBe( 3 );
+        expect( lastQuery.status ).toBe( true );
+    } );
+
+    test( 'query SELECT ok get valuesById bad column key', async () => {
+        let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
+        const oMysql = new OMysql( { settings } );
+
+        await oMysql.poolOpen();
+        let result = await oMysql.query( `SELECT * FROM test_easy`, 'valuesById', 'chacho', 'name' );
+        await oMysql.poolClose();
+
+        let lastQuery = oMysql.getLastQuery();
+
+        expect( result ).toEqual( { 'chacho': undefined, 'bar': undefined, 'tio': undefined } );
+        expect( lastQuery.count ).toBe( 3 );
+        expect( lastQuery.status ).toBe( true );
+    } );
+
+    test( 'query SELECT ok get valuesById column bad key', async () => {
+        let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
+        const oMysql = new OMysql( { settings } );
+
+        await oMysql.poolOpen();
+        let result = await oMysql.query( `SELECT * FROM test_easy`, 'valuesById', 'id', 'chacho' );
+        await oMysql.poolClose();
+
+        let lastQuery = oMysql.getLastQuery();
+
+        expect( result ).toEqual( {} );
         expect( lastQuery.count ).toBe( 3 );
         expect( lastQuery.status ).toBe( true );
     } );
@@ -413,6 +483,21 @@ describe('query SELECT', () => {
         expect( lastQuery.status ).toBe( true );
     } );
 
+    test( 'query SELECT ok get arrayById bad column', async () => {
+        let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
+        const oMysql = new OMysql( { settings } );
+
+        await oMysql.poolOpen();
+        let result = await oMysql.query( `SELECT * FROM test_easy ORDER BY id ASC`, 'arrayById', 'chacho' );
+        await oMysql.poolClose();
+
+        let lastQuery = oMysql.getLastQuery();
+
+        expect( result ).toEqual( {} );
+        expect( lastQuery.count ).toBe( 3 );
+        expect( lastQuery.status ).toBe( true );
+    } );
+
     test( 'query SELECT ok get row', async () => {
         let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
         const oMysql = new OMysql( { settings } );
@@ -443,6 +528,21 @@ describe('query SELECT', () => {
         expect( lastQuery.status ).toBe( true );
     } );
 
+    test( 'query SELECT ok get bad row 999', async () => {
+        let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
+        const oMysql = new OMysql( { settings } );
+
+        await oMysql.poolOpen();
+        let result = await oMysql.query( `SELECT * FROM test_easy ORDER BY id ASC`, 'row', 999 );
+        await oMysql.poolClose();
+
+        let lastQuery = oMysql.getLastQuery();
+
+        expect( result ).toEqual( {} );
+        expect( lastQuery.count ).toBe( 3 );
+        expect( lastQuery.status ).toBe( true );
+    } );
+
     test( 'query SELECT ok get rowStrict', async () => {
         let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
         const oMysql = new OMysql( { settings } );
@@ -459,6 +559,21 @@ describe('query SELECT', () => {
 });
 
 describe('query SELECT with fnSanitize', () => {
+    test( 'query SELECT ok bad fnSanitize', async () => {
+        let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
+        const oMysql = new OMysql( { settings } );
+
+        await oMysql.poolOpen();
+        let result = await oMysql.query( `SELECT '' FROM test_easy`, 'bool', 0, 0, 'chacho' );
+        await oMysql.poolClose();
+
+        let lastQuery = oMysql.getLastQuery();
+
+        expect( result ).toEqual( false );
+        expect( lastQuery.status ).toBe( false );
+        expect( lastQuery.error.msg ).toBe( 'OMysql.query:fnSanitize must be a function, not a string.' );
+    } );
+
     test( 'query INSERT ok get id', async () => {
         let settings = Object.assign( {}, CONFIG, { database: 'test_oromysql' } );
         const oMysql = new OMysql( { settings } );

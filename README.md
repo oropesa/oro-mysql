@@ -39,6 +39,7 @@ console.log( result ); // resultArray
 * [new OMysql()](#new-omysql--settings--)
 * [await .poolOpen()](#await-poolopen)
 * [await .poolClose()](#await-poolclose)
+* [.getClient()](#getclient)
 * [.getDB()](#getdb)
 * [.getInfo()](#getinfo)
 * [.getStatus()](#getstatus)
@@ -47,15 +48,15 @@ console.log( result ); // resultArray
 * [.getFirstQuery( offset = 0, raw = false )](#getfirstquery-offset--0-raw--false-)
 * [.getAffectedRows()](#getaffectedrows)
 * [.sanitize( value )](#sanitize-value-)
-* [await .queryOnce( query, format = 'default', valueKey = 0, valueId = 0, fnSanitize = '' )](#await-queryonce-query-format--default-valuekey--0-valueid--0-fnsanitize---)
-* [await .query( query, format = 'default', valueKey = 0, valueId = 0, fnSanitize = '' )](#await-query-query-format--default-valuekey--0-valueid--0-fnsanitize---)
+* [await .queryOnce( query, format = 'default', valueKey = 0, valueId = 0, fnSanitize = null )](#await-queryonce-query-format--default-valuekey--0-valueid--0-fnsanitize--null-)
+* [await .query( query, format = 'default', valueKey = 0, valueId = 0, fnSanitize = null )](#await-query-query-format--default-valuekey--0-valueid--0-fnsanitize--null-)
     * [Parameters](#await-query-parameters)
     * [Formats](#await-query-formats)
 
 ### new OMysql( { settings } )
 
 ```js
-const OMysql = require( 'oro-mysql' );
+const { OMysql } = require( 'oro-mysql' );
 
 const settings = {
     host: 'localhost',
@@ -190,11 +191,11 @@ console.log( valInjection ); // `'\' OR 1 = 1'`
 
 __Note:__ It could be called as _static_ too.
 
-### await .queryOnce( query, format = 'default', valueKey = 0, valueId = 0, fnSanitize = '' )
+### await .queryOnce( query, format = 'default', valueKey = 0, valueId = 0, fnSanitize = null )
 
 If you just need to call only _one query_, this function calls `poolOpen, query, poolClose` respectively.
 
-### await .query( query, format = 'default', valueKey = 0, valueId = 0, fnSanitize = '' )
+### await .query( query, format = 'default', valueKey = 0, valueId = 0, fnSanitize = null )
 
 You can choose the format that return the query.
 
@@ -214,7 +215,7 @@ By default the returned object is `resultArray`. This object extends from `Array
 2. *format*: String, Allowed values: `default`,`id`,`bool`,`count`,`value`,`values`,`valuesById`,`array`,`arrayById`,`rowStrict`,`row`.
 3. *valueKey*: String|Number, name or position of the column to get the value.
 4. *valueId*: String|Number, name or position of the column to use as param.
-5. *fnSanitize*: String, name of function to map each value.
+5. *fnSanitize*: Null|Function, function to map each value.
    <br><small>Note: If _format_ is `row|array`, it maps each column-value, not the whole object.</small>
 
 #### (await .query) Formats

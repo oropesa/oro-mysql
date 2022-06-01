@@ -19,6 +19,9 @@ class ResultArray extends Array {
     }
 }
 
+const ALLOWED_QUERY_FORMATS =
+    [ 'id', 'bool', 'count', 'value', 'values', 'valuesById', 'array', 'arrayById', 'rowStrict', 'row', 'default' ];
+
 class OMysql {
 
     #db
@@ -104,10 +107,18 @@ class OMysql {
 
     getAffectedRows() { return this.#lastResult ? this.#lastResult.count : 0; }
 
-    static sanitize( value ) { return mysql.escape( value ); }
     sanitize( value ) { return OMysql.sanitize( value ); }
+    static sanitize( value ) {
+        if( Ofn.isNully( value ) ) { return 'NULL'; }
+        if( Ofn.isBoolean( value ) ) { return +value +''; }
+        if( Ofn.isObject( value ) || Ofn.isArray( value ) ) {
+            value = JSON.stringify( value );
+        }
 
-    async queryOnce( query, format = 'default', valueKey = 0, valueId = 0, fnSanitize = '' ) {
+        return mysql.escape( value );
+    }
+
+    async queryOnce( query, format = 'default', valueKey = 0, valueId = 0, fnSanitize = null ) {
         const poolOpen = await this.poolOpen();
         if( ! poolOpen.status ) { return poolOpen; }
 
@@ -122,10 +133,25 @@ class OMysql {
         return Ofn.setResponseOK( { result } );
     }
 
-    async query( query, format = 'default', valueKey = 0, valueId = 0, fnSanitize = '' ) {
+    async query( query, format = 'default', valueKey = 0, valueId = 0, fnSanitize = null ) {
         await this.#dbQuery( query );
 
-        if( ! this.#lastResult.status ) { return false; }
+        if( ! this.#lastResult.status ) { return format === 'default' ? this.#lastResult : false; }
+
+        if( ! ALLOWED_QUERY_FORMATS.includes( format ) ) {
+            this.#lastResult.status = false;
+            this.#lastResult.error = { msg: `OMysql.query:format is not allowed: ${format}`, allowed_formats: ALLOWED_QUERY_FORMATS }
+            return false;
+        }
+
+        if( fnSanitize ) {
+            const fnSanitizeType = typeof fnSanitize;
+            if( fnSanitizeType !== 'function' ) {
+                this.#lastResult.status = false;
+                this.#lastResult.error = { msg: `OMysql.query:fnSanitize must be a function, not a ${fnSanitizeType}.`, fnSanitizeType }
+                return false;
+            }
+        }
 
         ! valueKey && ( valueKey = 0 );
         ! valueId  && ( valueId  = 0 );

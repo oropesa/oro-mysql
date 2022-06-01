@@ -1,6 +1,6 @@
 {
   "name": "oro-mysql",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Class OroMysql is a wrapper of npm-mysql2 to use async/await",
   "main": "index.js",
   "scripts": {

@@ -1,3 +1,9 @@
+## 1.0.2 / 2022-06-01
+* Updated `sanitize`, `boolean` is parsed to `tinyint (0|1)`; `null, undefined` is parsed to `NULL`; and `object`,`array` is parsed to `json stringify`.
+* Updated `query`, when param _query_ failed and _format_ is `default`, it's returned `ResultArray`, else returned `false`.
+* Updated `query`, when param _format_ is not allowed, or param _fnSanitize_ is not a function, it returns `false`.
+* Added testing when `query` param _format_, _valueKey_, _valueId_ or _fnSanitize_ are wrong.
+
 ## 1.0.1 / 2022-05-31
 * Fixed removing a forgotten console.log in `query, id`.
 * Added testing of `query, fnSanitize`.

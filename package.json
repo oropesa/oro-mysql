@@ -1,6 +1,6 @@
 {
   "name": "oro-mysql",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Class OroMysql is a wrapper of npm-mysql2 to use async/await",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "promise",
     "async/await"
   ],
-  "author": "Carlos Oropesa <carlos.oropesa@maresalogistica.com>",
+  "author": "Carlos Oropesa <carlos@oropensando.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -23,9 +23,9 @@
   "homepage": "https://github.com/oropesa/oro-mysql#readme",
   "dependencies": {
     "mysql2": "^2.3.3",
-    "oro-functions": "^1.1.5"
+    "oro-functions": "^1.1.7"
   },
   "devDependencies": {
-    "jest": "^28.1.0"
+    "jest": "^28.1.1"
   }
 }

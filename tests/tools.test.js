@@ -101,7 +101,7 @@ describe('tools query history', () => {
 
         let lastResult = oMysql.getLastQuery();
 
-        expect( lastResult.constructor.name ).toBe( 'ResultArray' );
+        expect( Ofn.type( lastResult, true ) ).toBe( 'ResultArray' );
         expect( result2 ).not.toBe( lastResult );
         expect( result2 ).toEqual( lastResult );
     } );
@@ -117,7 +117,7 @@ describe('tools query history', () => {
 
         let lastResult = oMysql.getLastQuery( 1 );
 
-        expect( lastResult.constructor.name ).toBe( 'ResultArray' );
+        expect( Ofn.type( lastResult, true ) ).toBe( 'ResultArray' );
         expect( result1 ).not.toBe( lastResult );
         expect( result1 ).toEqual( lastResult );
     } );
@@ -133,7 +133,7 @@ describe('tools query history', () => {
 
         let lastResult = oMysql.getLastQuery( 0, true );
 
-        expect( lastResult.constructor.name ).toBe( 'ResultArray' );
+        expect( Ofn.type( lastResult, true ) ).toBe( 'ResultArray' );
         expect( result2 ).toBe( lastResult );
     } );
 
@@ -162,7 +162,7 @@ describe('tools query history', () => {
 
         let lastResult = oMysql.getFirstQuery();
 
-        expect( lastResult.constructor.name ).toBe( 'ResultArray' );
+        expect( Ofn.type( lastResult, true ) ).toBe( 'ResultArray' );
         expect( result1 ).not.toBe( lastResult );
         expect( result1 ).toEqual( lastResult );
     } );
@@ -178,7 +178,7 @@ describe('tools query history', () => {
 
         let lastResult = oMysql.getFirstQuery( 1 );
 
-        expect( lastResult.constructor.name ).toBe( 'ResultArray' );
+        expect( Ofn.type( lastResult, true ) ).toBe( 'ResultArray' );
         expect( result2 ).not.toBe( lastResult );
         expect( result2 ).toEqual( lastResult );
     } );
@@ -194,7 +194,7 @@ describe('tools query history', () => {
 
         let lastResult = oMysql.getFirstQuery( 0, true );
 
-        expect( lastResult.constructor.name ).toBe( 'ResultArray' );
+        expect( Ofn.type( lastResult, true ) ).toBe( 'ResultArray' );
         expect( result1 ).toBe( lastResult );
     } );
 

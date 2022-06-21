@@ -87,7 +87,7 @@ describe('query INSERT', () => {
         let lastQuery = oMysql.getLastQuery();
 
         expect( result ).toBe( true );
-        expect( lastQuery.constructor.name ).toBe( 'ResultArray' );
+        expect( Ofn.type( lastQuery, true ) ).toBe( 'ResultArray' );
         expect( lastQuery.count ).toBe( 1 );
         expect( lastQuery.status ).toBe( true );
     } );
@@ -166,7 +166,7 @@ describe('query UPDATE', () => {
 
         let lastQuery = oMysql.getLastQuery();
 
-        expect( result.constructor.name ).toBe( 'ResultArray' );
+        expect( Ofn.type( result, true ) ).toBe( 'ResultArray' );
         expect( lastQuery.count ).toBe( 1 );
         expect( lastQuery.status ).toBe( true );
     } );
@@ -211,7 +211,7 @@ describe('query SELECT', () => {
         let result = await oMysql.query( `SELECT * FROMM test_easy` );
         await oMysql.poolClose();
 
-        expect( result.constructor.name ).toBe( 'ResultArray' );
+        expect( Ofn.type( result, true ) ).toBe( 'ResultArray' );
         expect( result.status ).toBe( false );
         expect( result.error.msg ).toMatch( /(Error: You have an error in your SQL syntax;)/ );
     } );
@@ -224,7 +224,7 @@ describe('query SELECT', () => {
         let result = await oMysql.query( `SELECT * FROM test_easy` );
         await oMysql.poolClose();
 
-        expect( result.constructor.name ).toBe( 'ResultArray' );
+        expect( Ofn.type( result, true ) ).toBe( 'ResultArray' );
         expect( result.status ).toBe( true );
         expect( result.count ).toBe( 3 );
     } );

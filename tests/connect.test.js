@@ -28,7 +28,7 @@ describe('get OMysql defaults', () => {
         const db = oMysql.getDB();
         await oMysql.poolClose();
 
-        expect( db.constructor.name ).toBe( 'PromiseConnection' );
+        expect( Ofn.type( db, true ) ).toBe( 'PromiseConnection' );
     } );
 
     test( 'get default settings', async () => {

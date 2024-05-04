@@ -1,0 +1,69 @@
+name: Validate Pull Request to Master
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4.0
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.TEST_ROOT_PASSWORD }}
+        ports:
+          - 3316:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: 'Checkout Code'
+        uses: actions/checkout@v4
+
+      - name: 'Install Node.js and jq'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: 'Install Dependencies'
+        run: npm ci
+
+      - name: 'Run Build'
+        run: npm run build
+
+      - name: 'Run Linter'
+        run: npm run lint
+
+      - name: 'Prepare config.json'
+        uses: jsdaniell/create-json@v1.2.3
+        with:
+          name: "config.json"
+          json: ${{ secrets.TEST_CONFIG_JSON }}
+          dir: 'src/__tests__/'
+
+      - name: 'Run Tests'
+        run: npm run test
+
+  project_version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout Code'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 'Install Node.js and jq'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: 'Get Version from package.json'
+        id: get_version
+        run: echo "version=$(jq -r .version ./package.json)" >> $GITHUB_OUTPUT
+
+      - name: 'Check if Tag Exists'
+        run: |
+          if [ $(git tag -l "v${{ steps.get_version.outputs.version }}") ]; then
+            echo "::error::Tag v${{ steps.get_version.outputs.version }} already exists." && exit 1
+          fi

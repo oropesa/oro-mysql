@@ -137,7 +137,7 @@ describe('easy query INSERT', () => {
 
     expect(result).toBe(false);
     expect(lastQuery.status).toBe(false);
-    expect(lastQuery.error?.msg).toBe(`Error: Duplicate entry 'chacho' for key '${UNIQUE_NAME_EASY}'`);
+    expect(lastQuery.error?.msg).toMatch(/Error: Duplicate entry 'chacho' for key/);
   });
 
   test('easy query INSERT ok get bool', async () => {

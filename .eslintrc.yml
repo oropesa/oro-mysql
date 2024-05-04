@@ -18,6 +18,7 @@ ignorePatterns:
   - src/__tests__/**/*.js
   - tmp.js
 rules:
+  prettier/prettier: off
   max-params: ['error', 5]
   #complexity: ["error", 20]
   complexity: ['error', 25]

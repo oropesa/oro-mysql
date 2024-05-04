@@ -14,7 +14,7 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.TEST_ROOT_PASSWORD }}
         ports:
-          - 3306:3306
+          - 3316:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -36,16 +36,14 @@ jobs:
         run: npm run lint
 
       - name: 'Prepare config.json'
-        run: echo "${{ secrets.TEST_CONFIG_JSON }}" > src/__tests__/config.json
-
-      - name: 'Display file contents'
-        run: cat src/__tests__/config.json
+        uses: jsdaniell/create-json@v1.2.3
+        with:
+          name: "config.json"
+          json: ${{ secrets.TEST_CONFIG_JSON }}
+          dir: 'src/__tests__/'
 
       - name: 'Run Tests'
         run: npm run test
-
-      - name: 'Stop MySQL Docker container'
-        run: docker stop mysql
 
   project_version:
     runs-on: ubuntu-latest

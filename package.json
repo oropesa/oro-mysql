@@ -1,16 +1,16 @@
 {
   "name": "oro-mysql",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "OroMysql Class is a wrapper of npm-mysql2 to use async/await",
   "type": "module",
-  "main": "./.cjs",
-  "module": "./.js",
-  "types": "./.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./.cjs",
-      "import": "./.js",
-      "types": "./.d.ts"
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     }
   },
   "scripts": {
@@ -21,7 +21,7 @@
     "lint": "eslint .",
     "prettier": "prettier --write .",
     "clean": "rm -R ./dist",
-    "clean:all": "rm -R ./dist ./node_modules",
+    "clean:all": "rm -R ./dist ./node_modules ./coverage",
     "build": "tsup ./src/index.ts",
     "watch": "nodemon"
   },

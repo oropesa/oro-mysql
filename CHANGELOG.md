@@ -1,3 +1,6 @@
+## 2.1.1 / 2024-07-15
+- Fixed package `exports`.
+
 ## 2.1.0 / 2024-07-15
 - Updated *eslint* to flat `eslint.config.js`.
 - Simplified `tsup.config.ts`.

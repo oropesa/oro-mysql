@@ -1,3 +1,32 @@
+## 2.1.0 / 2024-07-15
+- Updated *eslint* to flat `eslint.config.js`.
+- Simplified `tsup.config.ts`.
+- Updated libs:
+  - `mysql2` from `v3.9.` to `v3.10.2`.
+  - `oro-functions-client` from `v2.2.2` to `v2.3.1`.
+- Updated _dev_ libs:
+  - `@babel/core` from `v7.24.5` to `v7.24.9`.
+  - `@babel/preset-env` from `v7.24.5` to `v7.24.8`.
+  - `@babel/preset-typescript` from `v7.24.1` to `v7.24.7`.
+  - `eslint-plugin-jest` from `v28.4.0` to `v28.6.0`.
+  - `eslint-plugin-unicorn` from `v52.0.0` to `v54.0.0`.
+  - `nodemon` from `v3.1.0` to `v3.1.4`.
+  - `oro-functions` from `v2.1.1` to `v2.3.1`.
+  - `oro-timer` from `v2.0.6` to `v2.1.1`.
+  - `prettier` from `v3.2.5` to `v3.3.3`.
+  - `tsup` from `v8.0.2` to `v8.1.0`.
+  - `typescript` from `v5.4.5` to `v5.5.3`.
+- Added _dev_ libs:
+  - `@eslint/js` added `v9.7.0`.
+  - `globals` added `v15.8.0`.
+  - `typescript-eslint` added `v7.16.0`.
+- Removed _dev_ libs:
+  - `@typescript-eslint/eslint-plugin` removed.
+  - `@typescript-eslint/parser` removed.
+  - `eslint-config-alloy` removed.
+  - `eslint-plugin-github` removed.
+  - `eslint-plugin-jest-formatting` removed.
+
 ## 2.0.0 / 2024-05-03
 
 **NOTE:**<br>

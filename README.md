@@ -408,9 +408,9 @@ const valString = sqlClient.sanitize('chacho');
 console.log(valString);
 // -> `'chacho'`
 
-const valInjection = sqlClient.sanitize("' OR 1 = 1");
+const valInjection = sqlClient.sanitize(INJECTION_STRING);
 console.log(valInjection);
-// -> `'\' OR 1 = 1'`
+// -> `SANITIZED_INJECTION_STRING`
 ```
 
 <hr>
@@ -861,14 +861,14 @@ interface OMysqlQueryValueFnOpts<T> {
 ```
 
 ✔️ When query is valid and there is any affected row, it only takes the first row and
-`result` is the value of the `valueKey` column<sup>\*️⃣</sup> (typed as `T`).<br>
+`result` is the value of the `valueKey` column<sup>*1</sup> (typed as `T`).<br>
 ⚠️ When query is valid and there aren't affected rows, `result` is `undefined`.<br>
 ✔️ When query is valid with _fnSanitize_:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· function-input is the value of the `valueKey` column,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· function-output is type `T` (`result`).<br>
 ❌ When query fails, `result` is `false`.
 
-_\*️⃣ Notes:_<br>
+_*1 Notes:_<br>
 
 1. If `valueKey` is type _string_, then it references to the _column name_.<br>
 2. If `valueKey` is type _number_, then it references to the _column position_.
@@ -936,14 +936,14 @@ interface OMysqlQueryValuesFnOpts<T> {
 ```
 
 ✔️ When query is valid and there is any affected row, it takes all rows and
-`result` is an array of every _value_ of `valueKey` column<sup>\*️⃣</sup> with type `T`.<br>
+`result` is an array of every _value_ of `valueKey` column<sup>*2</sup> with type `T`.<br>
 ⚠️ When query is valid and there aren't affected rows, `result` is an empty array `[]`.<br>
 ✔️ When query is valid with _fnSanitize_:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· function-input is the value of every `valueKey` column,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· function-output is type `T` (and `result` is `T[]`).<br>
 ❌ When query fails, `result` is `false`.
 
-_\*️⃣ Notes:_<br>
+_*2 Notes:_<br>
 
 1. If `valueKey` is type _string_, then it references to the _column name_.<br>
 2. If `valueKey` is type _number_, then it references to the _column position_.
@@ -1014,14 +1014,14 @@ interface OMysqlQueryValuesByIdFnOpts<T> {
 
 ✔️ When query is valid and there is any affected row, it takes all rows and
 `result` is an object with:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· _`valueId` column-value_<sup>*️⃣</sup> as key,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· *`valueKey` column-value*<sup>*️⃣</sup> as value.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· _`valueId` column-value_<sup>*3</sup> as key,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· *`valueKey` column-value*<sup>*3</sup> as value.<br>
 ✔️ When query is valid and there aren't affected rows, `result` is an empty object `{}`.<br>
 ✔️ When query is valid with _fnSanitize_:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· function-input is the value of every `valueKey` column,<br>
 ❌ When query fails, `result` is `false`.
 
-_\*️⃣ Notes:_<br>
+_*3 Notes:_<br>
 
 1. If `valueKey` or `valueId` is type _string_, then it references to the _column name_.<br>
 2. If `valueKey` or `valueId` is type _number_, then it references to the _column position_.
@@ -1118,16 +1118,16 @@ interface OMysqlQueryArrayFnOpts<T> {
 ```
 
 ✔️ When query is valid, it returns an object where key is the value o of rows.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· _`valueKey` column-value_<sup>\*️⃣</sup> as key,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· _`valueKey` column-value_<sup>*4</sup> as key,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· _The whole `row` as value.<br>
 ⚠️ When query is valid and there aren't affected rows, `result` is an empty object `{}`.<br>
-✔️ When query is valid with \_fnSanitize_:<br>
+✔️ When query is valid with _fnSanitize_:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· function-input is each `row`.<br>
 ✔️ When query is valid with _fnValueSanitize_:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;· function-input is every `column-value, column-key` of each `row`.<br>
 ❌ When query fails, `result` is `false`.
 
-_\*️⃣ Notes:_<br>
+_*4 Notes:_<br>
 
 1. If `valueKey` is type _string_, then it references to the _column name_.<br>
 2. If `valueKey` is type _number_, then it references to the _column position_.
@@ -1319,6 +1319,6 @@ If you want to run `npm run test`, you can create your own `./test/config.json`
 ```
 
 **ADVISE:** When running the testing process, the system automatically generates and deletes the 'test*oromysql' database,
-so if `config.user` has not permission to create database, you should create the \_database* `test_oromysql` manually.
+so if `config.user` has not permission to create database, you should create the *database* `test_oromysql` manually.
 
 On the other hand, if in your _mysql_ already exist `test_oromysql` and it's required for you, avoid to `run test`.

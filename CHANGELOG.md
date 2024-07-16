@@ -1,3 +1,6 @@
+## 2.1.2 / 2024-07-16
+- Fixed `README.md` removing the _sql-injection_ example, which caused the package doesn't `npm publish`.
+
 ## 2.1.1 / 2024-07-15
 - Fixed package `exports`.
 

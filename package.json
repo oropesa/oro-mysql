@@ -1,6 +1,6 @@
 {
   "name": "oro-mysql",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "OroMysql Class is a wrapper of npm-mysql2 to use async/await",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -17,7 +17,7 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "coverage:open": "node coverage.open.js",
-    "coverage-open": "jest --coverage & node coverage.open.js",
+    "coverage-open": "jest --coverage && node coverage.open.js",
     "lint": "eslint .",
     "prettier": "prettier --write .",
     "clean": "rm -R ./dist",

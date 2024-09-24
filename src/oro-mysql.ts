@@ -176,7 +176,11 @@ export class OMysql {
         const errorResponse = Ofn.setResponseKO<OMysqlServerStatusError>({
           msg: errorArray[0].replace(/\n/g, ' '),
         });
-        args.oTimer && (errorResponse.error.times = args.oTimer.getTimes());
+
+        if (args.oTimer) {
+          errorResponse.error.times = args.oTimer.getTimes();
+        }
+
         return errorResponse;
       });
 
@@ -211,8 +215,9 @@ export class OMysql {
 
   public getInfo(): OMysqlConfig {
     const cloneConfig = Ofn.cloneObject(this.#config);
-    cloneConfig.password &&
-      (cloneConfig.password = Array.from({ length: cloneConfig.password.length }).fill('*').join(''));
+    if (cloneConfig.password) {
+      cloneConfig.password = Array.from({ length: cloneConfig.password.length }).fill('*').join('');
+    }
 
     return cloneConfig;
   }

@@ -38,7 +38,7 @@ jobs:
       - name: 'Prepare config.json'
         uses: jsdaniell/create-json@v1.2.3
         with:
-          name: "config.json"
+          name: 'config.json'
           json: ${{ secrets.TEST_CONFIG_JSON }}
           dir: 'src/__tests__/'
 

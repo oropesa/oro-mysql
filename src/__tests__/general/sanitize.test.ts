@@ -21,7 +21,6 @@ describe('tools sanitize', () => {
   });
 
   test('tool static sanitize null', async () => {
-    // eslint-disable-next-line unicorn/no-useless-undefined
     expect(OMysql.sanitize(undefined)).toBe(`NULL`);
     expect(OMysql.sanitize(null)).toBe(`NULL`);
     expect(OMysql.sanitize('NULL')).toBe(`'NULL'`);

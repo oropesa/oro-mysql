@@ -40,7 +40,6 @@ export class ResultArray extends Array {
   public clone() {
     const result = new ResultArray();
 
-    // eslint-disable-next-line array-callback-return
     this.map((value, key) => {
       result[key] = Ofn.cloneObject(value);
     });
@@ -49,7 +48,11 @@ export class ResultArray extends Array {
     result.count = this.count;
     result.statement = this.statement;
     result.columns = Ofn.cloneArray(this.columns);
-    this.error && (result.error = Ofn.cloneObject(this.error));
+
+    if (this.error) {
+      result.error = Ofn.cloneObject(this.error);
+    }
+
     return result;
   }
 }

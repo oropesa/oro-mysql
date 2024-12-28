@@ -2,6 +2,7 @@ import { Ofn } from 'oro-functions';
 
 import type { OMysqlConfig } from '../';
 
+// eslint-disable-next-line unicorn/prefer-module
 export const DIRNAME = __dirname;
 
 export const DATABASE_NAME = 'test_oromysql' as const;

@@ -1306,15 +1306,26 @@ const value = await sqlClient.query( "SELECT * FROM table WHERE id = $id", {
 
 ## Testing
 
-If you want to run `npm run test`, you can create your own `./test/config.json`
-(you can copypaste it from `./test/config-default.json`).
+If you want to run `npm run test` in local, first you need to run a mysql service (i.e. via docker):
+
+```bash
+# 'mysql:8.4.0' image
+> docker run -d --name ORO_MYSQL \
+    -p 3316:3306 \
+    -e MYSQL_ROOT_PASSWORD=password \
+    --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3 \
+    mysql:8.4.0
+```
+
+Then, you have to declare your own `./src/__tests__/config.json`, <br>
+_(Note:_ you can copypaste it from `./src/__tests__/config-default.json`._)_
 
 ```json
 {
-  "host": "localhost",
-  "database": null,
+  "host": "127.0.0.1",
+  "port": "3316"
   "user": "root",
-  "password": ""
+  "password": "password",
 }
 ```
 

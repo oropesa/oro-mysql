@@ -8,7 +8,22 @@ import {
   setEslintPluginUnicorn,
 } from './eslint.config.utils.js';
 
-const allowList = ['fn', 'Fn', 'db', 'tmp', 'obj', 'str', 'opts', 'Opts', 'args', 'Args', 'param', 'params', 'Params'];
+const allowList = [
+  'fn',
+  'Fn',
+  'db',
+  'tmp',
+  'obj',
+  'str',
+  'utils',
+  'opts',
+  'Opts',
+  'args',
+  'Args',
+  'param',
+  'params',
+  'Params',
+];
 
 export default [
   { ignores: DEFAULT_IGNORES },

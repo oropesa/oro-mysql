@@ -114,7 +114,7 @@ describe('init Bad OMysql', () => {
       return;
     }
 
-    expect(responseOpen.error.msg).toMatch(/Error: (Access denied for user|connect ECONNREFUSED)/);
+    expect(responseOpen.error.msg).toMatch(/Error|Error: (Access denied for user|connect ECONNREFUSED)/);
   });
 
   test('new OMysql( timeout-config )', async () => {

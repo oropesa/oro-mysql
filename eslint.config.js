@@ -12,6 +12,8 @@ const allowList = [
   'fn',
   'Fn',
   'db',
+  'dev',
+  'Dev',
   'tmp',
   'obj',
   'str',

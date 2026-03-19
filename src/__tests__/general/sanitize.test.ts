@@ -5,14 +5,14 @@ describe('tools sanitize', () => {
     const oMysql = new OMysql();
 
     expect(oMysql.sanitize(`chacho`)).toBe(`'chacho'`);
-    expect(oMysql.sanitize(`'chacho'`)).toBe(`'\\'chacho\\''`);
+    expect(oMysql.sanitize(`'chacho'`)).toBe(String.raw`'\'chacho\''`);
   });
 
   test('tool static sanitize char', async () => {
     expect(OMysql.sanitize(`chacho`)).toBe(`'chacho'`);
-    expect(OMysql.sanitize(`'chacho'`)).toBe(`'\\'chacho\\''`);
-    expect(OMysql.sanitize(`"chacho"`)).toBe(`'\\"chacho\\"'`);
-    expect(OMysql.sanitize(`' OR 1 = 1;`)).toBe(`'\\' OR 1 = 1;'`);
+    expect(OMysql.sanitize(`'chacho'`)).toBe(String.raw`'\'chacho\''`);
+    expect(OMysql.sanitize(`"chacho"`)).toBe(String.raw`'\"chacho\"'`);
+    expect(OMysql.sanitize(`' OR 1 = 1;`)).toBe(String.raw`'\' OR 1 = 1;'`);
   });
 
   test('tool static sanitize number', async () => {
@@ -37,7 +37,7 @@ describe('tools sanitize', () => {
   });
 
   test('tool static sanitize obj', async () => {
-    expect(OMysql.sanitize({ chacho: 'loco', tio: 1 })).toBe(`'{\\"chacho\\":\\"loco\\",\\"tio\\":1}'`);
-    expect(OMysql.sanitize({ chACho: "' OR 1 = 1;" })).toBe(`'{\\"chACho\\":\\"\\' OR 1 = 1;\\"}'`);
+    expect(OMysql.sanitize({ chacho: 'loco', tio: 1 })).toBe(String.raw`'{\"chacho\":\"loco\",\"tio\":1}'`);
+    expect(OMysql.sanitize({ chACho: "' OR 1 = 1;" })).toBe(String.raw`'{\"chACho\":\"\' OR 1 = 1;\"}'`);
   });
 });

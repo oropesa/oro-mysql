@@ -19,10 +19,10 @@ jobs:
 
     steps:
       - name: 'Checkout Code'
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: 'Install Node.js'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
 
@@ -43,18 +43,24 @@ jobs:
           dir: 'src/__tests__/'
 
       - name: 'Run Tests'
-        run: npm run test
+        run: npm run coverage
+
+      - name: 'Upload Coverage Report'
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report
+          path: coverage/
 
   project_version:
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout Code'
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: 'Install Node.js'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
 
